@@ -7,4 +7,5 @@ CREATE TABLE
         created_at timestamp,
         updated_at timestamp,
         status varchar(100)
+        -- Publish | Draft | Thrash
     );
