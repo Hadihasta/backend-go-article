@@ -50,7 +50,8 @@ func main() {
 	postService := services.NewPostService(postRepo)
 	postHandler := handlers.NewPostHandler(postService)
 
-	http.HandleFunc("/api/v1/article/", middlewares.CORS(middlewares.Logger(postHandler.HandlePosts)))
+	http.HandleFunc("/api/v1/article", middlewares.CORS(middlewares.Logger(postHandler.HandlePosts)))
+	http.HandleFunc("/api/v1/article/", middlewares.CORS(middlewares.Logger(postHandler.HandlePostByID)))
 	
 
 	http.HandleFunc("/api/v1/health",apiKeyMiddleware(func(w http.ResponseWriter, r *http.Request) {

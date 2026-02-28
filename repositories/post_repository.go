@@ -3,6 +3,7 @@ package repositories
 import (
 	"backend-article-portal/models"
 	"database/sql"
+	"fmt"
 )
 
 type PostRepository struct {
@@ -71,4 +72,79 @@ func (repo *PostRepository) GetAll(limit, offset string) ([]models.Posts, error)
 	}
 
 	return posts, nil
+}
+
+
+func (repo *PostRepository) GetById(id int) (*models.Posts, error) {
+	var post models.Posts
+
+	query := `
+		SELECT id, title, content, category, status
+		FROM posts
+		WHERE id = ?
+	`
+
+	err := repo.db.QueryRow(query, id).Scan(
+		&post.ID,
+		&post.Title,
+		&post.Content,
+		&post.Category,
+		&post.Status,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("post not found")
+		}
+		return nil, err
+	}
+
+
+	return &post, nil
+}
+
+
+func (repo *PostRepository) Update(post *models.Posts) error {
+
+	query := `
+	UPDATE posts
+	SET title = ?, content = ?, category = ?, status = ?
+	WHERE id = ?
+	`
+
+	result, err := repo.db.Exec(
+		query,
+		post.Title,
+		post.Content,
+		post.Category,
+		post.Status,
+		post.ID,
+	)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
+		return fmt.Errorf("no change found / no post found")
+	}
+
+	return nil
+}
+
+func (repo *PostRepository) Delete(id int) error {
+
+	query := `DELETE FROM posts WHERE id = ?`
+
+	result, err := repo.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
+		return fmt.Errorf("post not found")
+	}
+
+	return nil
 }
