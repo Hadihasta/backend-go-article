@@ -23,17 +23,18 @@ func (s *PostService) Create(data *models.Posts) error {
 	return s.repo.Create(data)
 }
 
-func (s *PostService) GetAll(limit, offset string) ([]models.ResponsePosts, error) {
+func (s *PostService) GetAll(limit, offset string) ([]models.Posts, error) {
 
 	posts, err := s.repo.GetAll(limit, offset)
 	if err != nil {
 		return nil, err
 	}
 
-	var response []models.ResponsePosts
+	var response []models.Posts
 
 	for _, p := range posts {
-		response = append(response, models.ResponsePosts{
+		response = append(response, models.Posts{
+			ID:    p.ID,
 			Title:    p.Title,
 			Content:  p.Content,
 			Category: p.Category,

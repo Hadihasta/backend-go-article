@@ -35,11 +35,11 @@ func ValidatePost(data *models.Posts) error {
 	validStatus := map[string]bool{
 		"publish": true,
 		"draft":   true,
-		"thrash":  true,
+		"trash":  true,
 	}
 
 	if !validStatus[strings.ToLower(data.Status)] {
-		return errors.New("status must be publish, draft, or thrash")
+		return errors.New("status must be publish, draft, or trash")
 	}
 
 	return nil
