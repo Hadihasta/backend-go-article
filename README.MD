@@ -101,4 +101,7 @@ DELETE /api/v1/article/{id}
 
 Send API Key via header:
 
-X-API-KEY: secretweapon
+X-API-KEY: [your env API_KEY]
+
+
+deployed project : https://queless.space/dashboard
